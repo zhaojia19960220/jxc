@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.atguigu.jxc.dao.CustomerDao">
+    <resultMap id="CustomerMap" type="com.atguigu.jxc.entity.Customer">
+        <id column="customer_id" property="customerId"></id>
+        <result column="customer_name" property="customerName"></result>
+        <result column="contacts" property="contacts"></result>
+        <result column="phone_number" property="phoneNumber"></result>
+        <result column="address" property="address"></result>
+        <result column="remarks" property="remarks"></result>
+    </resultMap>
+    <select id="getCustomers" resultMap="CustomerMap">
+        SELECT
+        customer_id,
+        customer_name,
+        contacts,
+        phone_number,
+        address,
+        remarks
+
+        /*"customerId": 1,
+        "customerName": "家乐福（青石桥店）",
+        "contacts": "王二麻子",
+        "phoneNumber": "13555555555",
+        "address": "成都市锦江区大业路6号COSMO财富中心F3",
+        "remarks": "家乐福超市稳定客户"*/
+        FROM
+        t_customer
+        <where>
+            <if test="customerName != null and customerName != ''">
+                customer_name LIKE CONCAT('%', #{customerName} ,'%')  OR
+            </if>
+        </where>
+        LIMIT #{offSet}, #{rows}
+    </select>
+
+</mapper>

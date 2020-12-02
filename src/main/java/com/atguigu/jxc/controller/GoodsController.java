@@ -6,15 +6,19 @@ import com.atguigu.jxc.service.GoodsService;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.Path;
 import java.util.Map;
 
 /**
  * @description 商品信息Controller
  */
+
+@Controller
+@RequestMapping("/goods")
 public class GoodsController {
 
     @Autowired
@@ -28,6 +32,16 @@ public class GoodsController {
      * @param goodsTypeId 商品类别ID
      * @return
      */
+    //请求URL：http://localhost:8080/goods/listInventory
+    //请求参数：Integer page, Integer rows, String codeOrName, Integer goodsTypeId
+    @RequestMapping("/listInventory")
+    @ResponseBody
+    public Map<String,Object> listInventory(Integer page,Integer rows, String codeOrName,Integer goodsTypeId){
+        Map<String,Object> map = goodsService.listInventory(page,rows,codeOrName,goodsTypeId);
+
+        return map;
+    }
+
 
 
     /**

@@ -9,6 +9,7 @@ import java.util.Map;
  * @description
  */
 public interface CustomerReturnListGoodsService {
+    Integer getCustomerReturnTotalByGoodsId(Integer goodsId);
 
     /*Integer getCustomerReturnTotalByGoodsId(Integer goodsId);
 

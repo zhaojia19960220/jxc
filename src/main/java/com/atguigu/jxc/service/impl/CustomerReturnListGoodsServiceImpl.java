@@ -26,6 +26,24 @@ import java.util.Map;
  */
 @Service
 public class CustomerReturnListGoodsServiceImpl implements CustomerReturnListGoodsService {
+    @Autowired
+    private CustomerReturnListGoodsDao customerReturnListGoodsDao;
+    @Autowired
+    private UserDao userDao;
+    @Autowired
+    private LogService logService;
+    @Autowired
+    private GoodsDao goodsDao;
+    @Autowired
+    private GoodsTypeDao goodsTypeDao;
+
+    @Override
+    public Integer getCustomerReturnTotalByGoodsId(Integer goodsId) {
+
+        Integer n = customerReturnListGoodsDao.getCustomerReturnTotalByGoodsId(goodsId);
+
+        return n == null ? 0 : n;
+    }
 
    /* @Autowired
     private CustomerReturnListGoodsDao customerReturnListGoodsDao;

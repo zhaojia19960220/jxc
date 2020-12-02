@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.atguigu.jxc.dao.SupplierDao">
+
+    <resultMap id="SupplierDaoMap" type="com.atguigu.jxc.entity.Supplier">
+        <id column="supplier_id" property="supplierId"></id>
+        <result column="supplier_name" property="supplierName"></result>
+        <result column="contacts" property="contacts"></result>
+        <result column="phone_number" property="phoneNumber"></result>
+        <result column="address" property="address"></result>
+        <result column="remarks" property="remarks"></result>
+    </resultMap>
+
+    <select id="getSuppliersByPage" resultMap="SupplierDaoMap">
+        select
+            supplier_id,
+            supplier_name,
+            contacts,
+            phone_number,
+            address,
+            remarks
+        from t_supplier
+        <where>
+            <if test="supplierName != null and supplierName != ''">
+                supplier_name  LIKE CONCAT('%', #{supplierName} ,'%')
+            </if>
+        </where>
+        LIMIT #{offSet}, #{rows}
+    </select>
+
+    <insert id="insertSuppiler" useGeneratedKeys="true" keyProperty="supplierId" parameterType="com.atguigu.jxc.entity.Supplier" >
+        insert into t_supplier
+        (
+            supplier_name,
+            contacts,
+            phone_number,
+            address,
+            remarks
+        )
+        values
+        (
+            #{supplierName},
+            #{contacts},
+            #{phoneNumber},
+            #{address},
+            #{remarks}
+        )
+    </insert>
+    <update id="updateSupplier" parameterType="com.atguigu.jxc.entity.Supplier">
+        update t_supplier
+        set
+            supplier_name=#{supplierName},
+            contacts=#{contacts},
+            phone_number=#{phoneNumber},
+            address= #{address},
+            remarks=#{remarks}
+            where supplier_id =#{supplierId}
+
+    </update>
+
+    <delete id="deleteSuppliers">
+        delete from t_supplier where supplier_id in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

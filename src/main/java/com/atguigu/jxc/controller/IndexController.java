@@ -17,4 +17,6 @@ public class IndexController {
     public String toIndex(){
         return "redirect:login.html";
     }
+
+
 }

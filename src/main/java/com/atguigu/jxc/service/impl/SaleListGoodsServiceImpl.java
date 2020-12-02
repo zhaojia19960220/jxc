@@ -28,6 +28,24 @@ import java.util.Map;
  */
 @Service
 public class SaleListGoodsServiceImpl implements SaleListGoodsService {
+    @Autowired
+    private SaleListGoodsDao saleListGoodsDao;
+    @Autowired
+    private UserDao userDao;
+    @Autowired
+    private LogService logService;
+    @Autowired
+    private GoodsDao goodsDao;
+    @Autowired
+    private GoodsTypeDao goodsTypeDao;
+
+    @Override
+    public Integer getSaleTotalByGoodsId(Integer goodsId) {
+        Integer n = saleListGoodsDao.getSaleTotalByGoodsId(goodsId);
+
+        return n == null ? 0 : n;
+    }
+
 
    /* @Autowired
     private SaleListGoodsDao saleListGoodsDao;

@@ -26,6 +26,15 @@ public class GoodsServiceImpl implements GoodsService {
     @Autowired
     private GoodsDao goodsDao;
 
+    @Autowired
+    private LogService logService;
+
+    @Autowired
+    private SaleListGoodsService saleListGoodsService;
+
+    @Autowired
+    private CustomerReturnListGoodsService customerReturnListGoodsService;
+
     @Override
     public ServiceVO getCode() {
 
@@ -46,5 +55,28 @@ public class GoodsServiceImpl implements GoodsService {
         return new ServiceVO<>(SuccessCode.SUCCESS_CODE, SuccessCode.SUCCESS_MESS, unitCode);
     }
 
+    //分页查询商品库存信息
+    @Override
+    public Map<String, Object> listInventory(Integer page, Integer rows, String codeOrName, Integer goodsTypeId) {
+        Map<String,Object> map = new HashMap<>();
 
+        page = page == 0 ? 1 : page;
+        int offSet = (page - 1) * rows;
+
+        List<Goods> goodsList = goodsDao.getGoodsInventoryList(offSet, rows, codeOrName, goodsTypeId);
+
+        for (Goods goods : goodsList) {
+            // 销售总量等于销售单据的销售数据减去退货单据的退货数据
+            goods.setSaleTotal(saleListGoodsService.getSaleTotalByGoodsId(goods.getGoodsId())
+                    - customerReturnListGoodsService.getCustomerReturnTotalByGoodsId(goods.getGoodsId()));
+        }
+
+        map.put("rows", goodsList);
+
+        map.put("total", goodsDao.getGoodsInventoryCount(codeOrName, goodsTypeId));
+
+        logService.save(new Log(Log.SELECT_ACTION, "分页查询商品库存信息"));
+
+        return map;
+    }
 }
